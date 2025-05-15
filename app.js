@@ -56,21 +56,20 @@ app.get('/products/:id', async (req, res) => {
 });
 
 app.post('/products', async (req, res) => {
-    const {error} = await supabase
+    const { error } = await supabase
         .from('products')
         .insert({
             name: req.body.name,
             description: req.body.description,
             price: req.body.price,
-        })
-    if (error) {
-        res.send(error);
-    }
-    res.send("created!!");
-    console.log("retorno "+ req.body.name);
-    console.log("retorno "+ req.body.description);
-    console.log("retorno "+ req.body.price);
+        });
 
+    if (error) {
+        console.error("Erro ao inserir produto:", error);
+        return res.status(500).json({ error: error.message }); // Retorna erro em JSON
+    }
+    
+    return res.status(201).json({ message: "Produto criado com sucesso!" });
 });
 
 app.put('/products/:id', async (req, res) => {
